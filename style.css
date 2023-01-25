@@ -11,7 +11,7 @@ body {
 
 .signup-form {
   border: 10rem;
-  margin-top: 150px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,4 +38,9 @@ body {
 a {
   text-decoration: none;
   color: black;
+}
+
+h3 {
+  margin-top: 30px;
+  margin-left: 569px;
 }
