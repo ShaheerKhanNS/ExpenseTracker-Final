@@ -23,12 +23,23 @@ body {
   margin-top: 20px;
   width: 15%;
 }
-
+.btn-login {
+  margin-top: 20px;
+  width: 15%;
+}
 .user {
   display: flex;
   justify-content: space-around;
   width: 50%;
   margin-left: 265px;
+}
+.error {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 50%;
+  margin-left: 265px;
+  color: red;
 }
 
 .span {
