@@ -15,6 +15,8 @@ btnLogin.addEventListener("click", async () => {
         },
       });
       alert(respone.data.message);
+      localStorage.setItem("token", respone.data.token);
+      // console.log(respone.data.token);
       window.location.replace("http://127.0.0.1:8080/expensePage.html");
     }
   } catch (err) {

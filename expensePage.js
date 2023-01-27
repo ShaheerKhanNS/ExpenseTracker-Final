@@ -15,10 +15,14 @@ btnSubmit.addEventListener("click", async (e) => {
     const description = document.getElementById("description").value;
     const category = document.getElementById("category").value;
 
+    const token = localStorage.getItem("token");
+
     if (price && description && category) {
       await axios({
         method: "POST",
         url: "http://localhost:3000/api/v1/expense/addexpense",
+        headers: { Authorization: token },
+
         data: {
           price,
           description,
@@ -26,6 +30,7 @@ btnSubmit.addEventListener("click", async (e) => {
         },
       });
       clearField();
+      window.location.reload();
     } else {
       alert("Please Fill all the required fields for better analysis🤗");
     }
@@ -67,9 +72,11 @@ const renderExpenses = (price, description, category, id, i) => {
 };
 
 const retreiveData = async () => {
+  const token = localStorage.getItem("token");
   const expenses = await axios({
     method: "GET",
     url: "http://localhost:3000/api/v1/expense",
+    headers: { Authorization: token },
   });
   let indianCurrency = new Intl.NumberFormat("en-IN", {
     style: "currency",
