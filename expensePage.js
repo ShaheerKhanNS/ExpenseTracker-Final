@@ -1,4 +1,5 @@
 const btnSubmit = document.getElementById("btn");
+const btnPremium = document.getElementById("btn-premium");
 
 const clearField = () => {
   document.getElementById("price").value =
@@ -37,6 +38,55 @@ btnSubmit.addEventListener("click", async (e) => {
   } catch (err) {
     alert(err.message);
   }
+});
+
+btnPremium.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+
+  const response = await axios({
+    method: "GET",
+    url: "http://localhost:3000/api/v1/purchase/premiummembership",
+    headers: { Authorization: token },
+  });
+
+  console.log(response);
+
+  const options = {
+    key: response.data.key_id,
+    order_id: response.data.order.id,
+    handler: async (response) => {
+      await axios({
+        method: "POST",
+        url: "http://localhost:3000/api/v1/purchase/premiummembership",
+        data: {
+          status: true,
+          order_id: options.order_id,
+          payment_id: response.razorpay_payment_id,
+        },
+        headers: { Authorization: token },
+      });
+      alert("You have a premium account😎");
+    },
+  };
+
+  const rzp = new Razorpay(options);
+
+  rzp.open();
+
+  rzp.on("payment.failed", async (error) => {
+    await axios({
+      method: "POST",
+      url: "http://localhost:3000/api/v1/purchase/premiummembership",
+      data: {
+        status: false,
+        order_id: options.order_id,
+        payment_id: response.razorpay_payment_id,
+      },
+      headers: { Authorization: token },
+    });
+    alert(error.error.description);
+  });
 });
 
 const deleteExpense = async (e) => {
