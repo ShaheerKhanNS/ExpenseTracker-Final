@@ -1,6 +1,8 @@
 const btnSubmit = document.getElementById("btn");
 const btnPremium = document.getElementById("btn-premium");
 const btnLeader = document.getElementById("btn-leader");
+const btnClose = document.getElementById("btn-close");
+const btnFake = document.getElementById("btn-leader-fake");
 
 let indianCurrency = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -167,17 +169,18 @@ const retreiveData = async () => {
   });
 };
 
+const div = document.getElementById("leader-board-view");
+const leaderBoardTable = document.getElementById("leader-table");
+
 btnLeader.addEventListener("click", async (e) => {
   e.preventDefault();
 
-  const div = document.getElementById("leader-board-view");
-  const leaderBoardTable = document.getElementById("leader-table");
+  btnClose.classList.remove("invisible");
 
   div.classList.add("view");
   leaderBoardTable.classList.remove("invisible");
-  btnLeader.textContent = "Close";
-  btnLeader.classList.add("btn-outline-danger");
-  btnLeader.classList.remove("btn-outline-secondary");
+
+  btnLeader.classList.add("invisible");
 
   // Close Functionality; will be added
 
@@ -186,11 +189,34 @@ btnLeader.addEventListener("click", async (e) => {
     url: "http://localhost:3000/api/v1/premium/showleaderboard",
   });
 
-  response.data.data.forEach((data, i) => {
+  // console.log(response);
+
+  response.data.userAggregatedExpense.forEach((data, i) => {
     const formattedPrice = indianCurrency.format(data.total_cost);
     const name = data.name;
     renderLeaderBoard(i + 1, name, formattedPrice);
   });
+});
+
+btnClose.addEventListener("click", (e) => {
+  e.preventDefault();
+  btnClose.classList.add("invisible");
+
+  div.classList.remove("view");
+  leaderBoardTable.classList.add("invisible");
+
+  btnFake.classList.remove("invisible");
+});
+
+btnFake.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  btnClose.classList.remove("invisible");
+
+  div.classList.add("view");
+  leaderBoardTable.classList.remove("invisible");
+
+  btnFake.classList.add("invisible");
 });
 
 window.addEventListener("DOMContentLoaded", retreiveData);
