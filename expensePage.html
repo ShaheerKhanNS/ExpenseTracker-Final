@@ -27,6 +27,14 @@
         display: flex;
         justify-content: space-between;
       }
+
+      .invisible {
+        display: none;
+      }
+      .view {
+        display: flex;
+        justify-content: space-evenly;
+      }
     </style>
   </head>
   <body>
@@ -49,23 +57,45 @@
           <button id="btn-premium" class="btn btn-outline-success">
             Unlock premium features
           </button>
+          <button id="btn-leader" class="btn btn-outline-secondary">
+            ShowLeaderBoard💹
+          </button>
+          <button
+            id="btn-premium-user"
+            class="btn btn-outline-success"
+            disabled
+          >
+            Premium User😎
+          </button>
         </div>
       </form>
       <br />
+      <div id="leader-board-view">
+        <table class="table table-info">
+          <thead>
+            <tr class="table-danger">
+              <th>SlNo:</th>
+              <th>Expense</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="table"></tbody>
+        </table>
 
-      <table class="table table-info">
-        <thead>
-          <tr class="table-danger">
-            <th>SlNo:</th>
-            <th>Expense</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="table"></tbody>
-      </table>
+        <table id="leader-table" class="table invisible">
+          <thead>
+            <tr class="table-secondary">
+              <th>SlNo:</th>
+              <th>Name</th>
+              <th>TotalExpense</th>
+            </tr>
+          </thead>
+          <tbody id="table-leaderBoard"></tbody>
+        </table>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

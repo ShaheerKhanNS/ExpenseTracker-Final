@@ -1,5 +1,12 @@
 const btnSubmit = document.getElementById("btn");
 const btnPremium = document.getElementById("btn-premium");
+const btnLeader = document.getElementById("btn-leader");
+
+let indianCurrency = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumSignificantDigits: 3,
+});
 
 const clearField = () => {
   document.getElementById("price").value =
@@ -50,8 +57,6 @@ btnPremium.addEventListener("click", async (e) => {
     headers: { Authorization: token },
   });
 
-  console.log(response);
-
   const options = {
     key: response.data.key_id,
     order_id: response.data.order.id,
@@ -67,6 +72,7 @@ btnPremium.addEventListener("click", async (e) => {
         headers: { Authorization: token },
       });
       alert("You have a premium account😎");
+      window.location.reload();
     },
   };
 
@@ -104,6 +110,18 @@ const deleteExpense = async (e) => {
   }
 };
 
+const renderLeaderBoard = (slNo, name, totalExpense) => {
+  const tableBody = document.getElementById("table-leaderBoard");
+
+  const template = ` <tr>
+      <td>${slNo}</td>
+      <td>${name}</td>
+      <td>${totalExpense}</td>
+      </tr>`;
+
+  tableBody.innerHTML += template;
+};
+
 const renderExpenses = (price, description, category, id, i) => {
   const tableBody = document.getElementById("table");
 
@@ -123,16 +141,22 @@ const renderExpenses = (price, description, category, id, i) => {
 
 const retreiveData = async () => {
   const token = localStorage.getItem("token");
+  const btnPremium = document.getElementById("btn-premium");
+  const premiumUser = document.getElementById("btn-premium-user");
+  const btnLeader = document.getElementById("btn-leader");
   const expenses = await axios({
     method: "GET",
     url: "http://localhost:3000/api/v1/expense",
     headers: { Authorization: token },
   });
-  let indianCurrency = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumSignificantDigits: 3,
-  });
+
+  if (expenses.data.data.premium === true) {
+    btnPremium.classList.add("invisible");
+  } else if (expenses.data.data.premium === false) {
+    premiumUser.classList.add("invisible");
+    btnLeader.classList.add("invisible");
+  }
+
   expenses.data.data.expenses.forEach((el, i) => {
     const id = el.id;
     const formattedPrice = indianCurrency.format(el.price);
@@ -142,5 +166,31 @@ const retreiveData = async () => {
     renderExpenses(formattedPrice, description, category, id, i + 1);
   });
 };
+
+btnLeader.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const div = document.getElementById("leader-board-view");
+  const leaderBoardTable = document.getElementById("leader-table");
+
+  div.classList.add("view");
+  leaderBoardTable.classList.remove("invisible");
+  btnLeader.textContent = "Close";
+  btnLeader.classList.add("btn-outline-danger");
+  btnLeader.classList.remove("btn-outline-secondary");
+
+  // Close Functionality; will be added
+
+  const response = await axios({
+    method: "GET",
+    url: "http://localhost:3000/api/v1/premium/showleaderboard",
+  });
+
+  response.data.data.forEach((data, i) => {
+    const formattedPrice = indianCurrency.format(data.total_cost);
+    const name = data.name;
+    renderLeaderBoard(i + 1, name, formattedPrice);
+  });
+});
 
 window.addEventListener("DOMContentLoaded", retreiveData);

@@ -7,20 +7,24 @@ const clearField = () => {
 };
 
 btnSignup.addEventListener("click", async () => {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  try {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  if (name && email && password) {
-    await axios({
-      method: "POST",
-      url: "http://localhost:3000/api/v1/users",
-      data: {
-        name,
-        email,
-        password,
-      },
-    });
-    clearField();
+    if (name && email && password) {
+      await axios({
+        method: "POST",
+        url: "http://localhost:3000/api/v1/users",
+        data: {
+          name,
+          email,
+          password,
+        },
+      });
+      clearField();
+    }
+  } catch (err) {
+    document.body.innerHTML += `<div class="error">${err.message}</div>`;
   }
 });
