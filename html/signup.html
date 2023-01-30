@@ -26,14 +26,22 @@
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="../style/style.css" />
 
-    <title>Login</title>
+    <title>Signup</title>
   </head>
   <body>
-    <h3>Log In To Your Account</h3>
+    <h3>Create an Account</h3>
     <div class="container">
       <form class="signup-form">
+        <label for="name" class="form-label">Firstname:</label>
+        <input
+          type="text"
+          id="name"
+          class="form-control"
+          required
+          placeholder="Your Name"
+        />
         <label for="email" class="form-label">Email:</label>
         <input
           type="email"
@@ -46,14 +54,14 @@
         <input type="password" id="password" class="form-control" required />
       </form>
       <div class="user">
-        <button class="btn btn-login btn-outline-danger">Login</button>
-        <span class="span"
-          >New User
-          <a href="http://127.0.0.1:8080/signup.html">Signup📲</a>
+        <button class="btn btn-signup btn-primary">Signup</button>
+        <span class="span-signup"
+          >Already a user😍
+          <a href="http://127.0.0.1:8080/html/login.html">Signin📲</a>
         </span>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <script src="/login.js"></script>
+    <script src="../js/signup.js"></script>
   </body>
 </html>

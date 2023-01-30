@@ -23,10 +23,7 @@ body {
   margin-top: 20px;
   width: 15%;
 }
-.btn-login {
-  margin-top: 20px;
-  width: 15%;
-}
+
 .user {
   display: flex;
   justify-content: space-around;
@@ -42,10 +39,6 @@ body {
   color: red;
 }
 
-.span {
-  margin-top: 30px;
-}
-
 a {
   text-decoration: none;
   color: black;
@@ -54,4 +47,27 @@ a {
 h3 {
   margin-top: 30px;
   margin-left: 569px;
+}
+
+.btn-place {
+  padding-top: 30px;
+  margin-left: 485px;
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.span-signup {
+  margin-top: 30px;
+}
+
+.signup-link {
+  display: flex;
+  align-items: center;
+}
+
+.forgot-password {
+  margin-right: 47px;
+  display: flex;
+  align-items: center;
 }
