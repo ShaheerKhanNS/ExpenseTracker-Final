@@ -23,6 +23,7 @@ btnSignup.addEventListener("click", async () => {
         },
       });
       clearField();
+      window.location.replace("http://127.0.0.1:8080/html/login.html");
     }
   } catch (err) {
     document.body.innerHTML += `<div class="error">${err.message}</div>`;

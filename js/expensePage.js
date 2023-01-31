@@ -1,9 +1,12 @@
+// Button Elements
 const btnSubmit = document.getElementById("btn");
 const btnPremium = document.getElementById("btn-premium");
 const btnLeader = document.getElementById("btn-leader");
 const btnClose = document.getElementById("btn-close");
 const btnFake = document.getElementById("btn-leader-fake");
 const btnDownload = document.getElementById("btn-download-expense");
+const btnLogout = document.getElementById("logout");
+const btnPreviousRprt = document.getElementById("report");
 
 const indianCurrency = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -17,6 +20,13 @@ const clearField = () => {
     document.getElementById("category").value =
       "";
 };
+
+btnLogout.addEventListener("click", (e) => {
+  e.preventDefault();
+  alert("Are you sure you want to logout😕");
+  localStorage.clear();
+  window.location.replace("http://127.0.0.1:8080/html/login.html");
+});
 
 btnSubmit.addEventListener("click", async (e) => {
   try {
@@ -147,6 +157,7 @@ const retreiveData = async () => {
   const btnPremium = document.getElementById("btn-premium");
   const premiumUser = document.getElementById("btn-premium-user");
   const btnLeader = document.getElementById("btn-leader");
+  const loggedUserName = document.getElementById("name");
 
   const expenses = await axios({
     method: "GET",
@@ -154,12 +165,18 @@ const retreiveData = async () => {
     headers: { Authorization: token },
   });
 
+  loggedUserName.textContent = `Welcome ${
+    expenses.data.data.name.charAt(0).toUpperCase() +
+    expenses.data.data.name.slice(1)
+  }✅`;
+
   if (expenses.data.data.premium === true) {
     btnPremium.classList.add("invisible");
   } else if (expenses.data.data.premium === false) {
     premiumUser.classList.add("invisible");
     btnLeader.classList.add("invisible");
     btnDownload.classList.add("invisible");
+    btnPreviousRprt.classList.add("invisible");
   }
 
   expenses.data.data.expenses.forEach((el, i) => {
@@ -233,7 +250,7 @@ btnDownload.addEventListener("click", async (e) => {
       url: "http://localhost:3000/api/v1/users/download",
       headers: { Authorization: token },
     });
-    console.log(response);
+
     if (response.status === 200) {
       let a = document.createElement("a");
       a.href = response.data.fileUrl;
