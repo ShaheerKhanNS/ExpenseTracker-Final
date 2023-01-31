@@ -146,6 +146,7 @@ const retreiveData = async () => {
   const btnPremium = document.getElementById("btn-premium");
   const premiumUser = document.getElementById("btn-premium-user");
   const btnLeader = document.getElementById("btn-leader");
+  const btnDownload = document.getElementById("btn-download-expense");
   const expenses = await axios({
     method: "GET",
     url: "http://localhost:3000/api/v1/expense",
@@ -157,6 +158,7 @@ const retreiveData = async () => {
   } else if (expenses.data.data.premium === false) {
     premiumUser.classList.add("invisible");
     btnLeader.classList.add("invisible");
+    btnDownload.classList.add("invisible");
   }
 
   expenses.data.data.expenses.forEach((el, i) => {
