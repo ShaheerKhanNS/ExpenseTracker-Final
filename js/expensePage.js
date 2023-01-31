@@ -3,8 +3,9 @@ const btnPremium = document.getElementById("btn-premium");
 const btnLeader = document.getElementById("btn-leader");
 const btnClose = document.getElementById("btn-close");
 const btnFake = document.getElementById("btn-leader-fake");
+const btnDownload = document.getElementById("btn-download-expense");
 
-let indianCurrency = new Intl.NumberFormat("en-IN", {
+const indianCurrency = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
   maximumSignificantDigits: 3,
@@ -146,7 +147,7 @@ const retreiveData = async () => {
   const btnPremium = document.getElementById("btn-premium");
   const premiumUser = document.getElementById("btn-premium-user");
   const btnLeader = document.getElementById("btn-leader");
-  const btnDownload = document.getElementById("btn-download-expense");
+
   const expenses = await axios({
     method: "GET",
     url: "http://localhost:3000/api/v1/expense",
@@ -219,6 +220,29 @@ btnFake.addEventListener("click", (e) => {
   leaderBoardTable.classList.remove("invisible");
 
   btnFake.classList.add("invisible");
+});
+
+btnDownload.addEventListener("click", async (e) => {
+  try {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const response = await axios({
+      method: "GET",
+      url: "http://localhost:3000/api/v1/users/download",
+      headers: { Authorization: token },
+    });
+    console.log(response);
+    if (response.status === 200) {
+      let a = document.createElement("a");
+      a.href = response.data.fileUrl;
+      a.download = "myexpense.csv";
+      a.click();
+    }
+  } catch (err) {
+    document.body.innerHTML += `<div class="error">Something went wrong in downloading your expense data Please try again after sometime or you can contact us via our helpline, Have a Great day!!</div>`;
+  }
 });
 
 window.addEventListener("DOMContentLoaded", retreiveData);
