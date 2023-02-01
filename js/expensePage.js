@@ -7,6 +7,13 @@ const btnFake = document.getElementById("btn-leader-fake");
 const btnDownload = document.getElementById("btn-download-expense");
 const btnLogout = document.getElementById("logout");
 const btnPreviousRprt = document.getElementById("report");
+const tableBody = document.getElementById("table");
+const btnPageSize = document.getElementById("btn-size");
+
+btnPageSize.addEventListener("click", () => {
+  const size = document.getElementById("size").value;
+  localStorage.setItem("pagesize", size);
+});
 
 const indianCurrency = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -136,8 +143,6 @@ const renderLeaderBoard = (slNo, name, totalExpense) => {
 };
 
 const renderExpenses = (price, description, category, id, i) => {
-  const tableBody = document.getElementById("table");
-
   const template = ` <tr>
       <td>${i}</td>
       <td>${price}</td>
@@ -152,16 +157,64 @@ const renderExpenses = (price, description, category, id, i) => {
   tableBody.innerHTML += template;
 };
 
-const retreiveData = async () => {
+const pagination = document.querySelector(".pagination");
+const showPagination = (
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+  lastPage,
+  nextPage,
+  previousPage
+) => {
+  pagination.innerHTML = "";
+  if (hasPreviousPage) {
+    const btn2 = document.createElement("button");
+    btn2.innerHTML = previousPage;
+    btn2.classList.add("btn", "btn-sm", "btn-outline-success");
+
+    btn2.addEventListener("click", () => {
+      tableBody.innerHTML = "";
+
+      retreiveData(previousPage);
+    });
+    pagination.appendChild(btn2);
+  }
+
+  const btn1 = document.createElement("button");
+  btn1.innerHTML = currentPage;
+  btn1.classList.add("btn", "btn-sm", "btn-outline-danger");
+  btn1.addEventListener("click", () => {
+    // To remove the previous clutter
+    tableBody.innerHTML = "";
+    retreiveData(currentPage);
+  });
+  pagination.appendChild(btn1);
+
+  if (hasNextPage) {
+    const btn3 = document.createElement("button");
+    btn3.innerHTML = nextPage;
+    btn3.classList.add("btn", "btn-sm", "btn-outline-success");
+    btn3.addEventListener("click", () => {
+      tableBody.innerHTML = "";
+
+      retreiveData(nextPage);
+    });
+    pagination.appendChild(btn3);
+  }
+};
+
+const retreiveData = async (page) => {
   const token = localStorage.getItem("token");
   const btnPremium = document.getElementById("btn-premium");
   const premiumUser = document.getElementById("btn-premium-user");
   const btnLeader = document.getElementById("btn-leader");
   const loggedUserName = document.getElementById("name");
 
+  const size = +localStorage.getItem("pagesize");
+
   const expenses = await axios({
     method: "GET",
-    url: "http://localhost:3000/api/v1/expense",
+    url: `http://localhost:3000/api/v1/expense?page=${page}&size=${size}`,
     headers: { Authorization: token },
   });
 
@@ -169,6 +222,15 @@ const retreiveData = async () => {
     expenses.data.data.name.charAt(0).toUpperCase() +
     expenses.data.data.name.slice(1)
   }✅`;
+
+  const {
+    currentPage,
+    hasNextPage,
+    hasPreviousPage,
+    lastPage,
+    nextPage,
+    previousPage,
+  } = expenses.data.data.page;
 
   if (expenses.data.data.premium === true) {
     btnPremium.classList.add("invisible");
@@ -185,7 +247,16 @@ const retreiveData = async () => {
     const category = el.category.charAt(0).toUpperCase() + el.category.slice(1);
     const description =
       el.description.charAt(0).toUpperCase() + el.description.slice(1);
+    // tableBody.innerHTML = "";
     renderExpenses(formattedPrice, description, category, id, i + 1);
+    showPagination(
+      currentPage,
+      hasNextPage,
+      hasPreviousPage,
+      lastPage,
+      nextPage,
+      previousPage
+    );
   });
 };
 

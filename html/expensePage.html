@@ -53,6 +53,18 @@
         margin-right: 30px;
         justify-content: space-between;
       }
+      .pagination {
+        display: flex;
+        justify-content: center;
+      }
+      .page-size-preference {
+        width: fit-content;
+        margin-left: 57px;
+      }
+      .select-box {
+        display: flex;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
@@ -142,6 +154,19 @@
           Previous Report🔽
         </button>
       </aside>
+    </div>
+    <div class="container pagination"></div>
+    <div class="container page-size-preference">
+      <label for="pageSize">Choose Number of Pages:</label>
+      <div class="select-box">
+        <select class="form-select form-select-sm" name="pageSize" id="size">
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+        </select>
+        <button class="btn btn-outline-info" id="btn-size">ok</button>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
