@@ -9,6 +9,11 @@ const btnLogout = document.getElementById("logout");
 const btnPreviousRprt = document.getElementById("report");
 const tableBody = document.getElementById("table");
 const btnPageSize = document.getElementById("btn-size");
+const premiumUser = document.getElementById("btn-premium-user");
+const loggedUserName = document.getElementById("name");
+
+// Token for Authentication
+const token = localStorage.getItem("token");
 
 btnPageSize.addEventListener("click", () => {
   const size = document.getElementById("size").value;
@@ -116,17 +121,20 @@ btnPremium.addEventListener("click", async (e) => {
 });
 
 const deleteExpense = async (e) => {
-  const id = e.dataset.id;
+  try {
+    const id = e.dataset.id;
 
-  const response = await axios({
-    method: "DELETE",
-    url: `http://localhost:3000/api/v1/expense/${id}`,
-  });
+    const response = await axios({
+      method: "DELETE",
+      url: `http://localhost:3000/api/v1/expense/${id}`,
+      headers: { Authorization: token },
+    });
 
-  if (response.data.status === "success") {
-    window.location.reload();
-  } else {
-    alert("Some thing Terrible had happened🤯");
+    if (response.data.status === "success") {
+      window.location.reload();
+    }
+  } catch (err) {
+    console.log(JSON.stringify(err));
   }
 };
 
@@ -204,12 +212,6 @@ const showPagination = (
 };
 
 const retreiveData = async (page) => {
-  const token = localStorage.getItem("token");
-  const btnPremium = document.getElementById("btn-premium");
-  const premiumUser = document.getElementById("btn-premium-user");
-  const btnLeader = document.getElementById("btn-leader");
-  const loggedUserName = document.getElementById("name");
-
   const size = +localStorage.getItem("pagesize");
 
   const expenses = await axios({
