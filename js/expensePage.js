@@ -135,6 +135,7 @@ const deleteExpense = async (e) => {
     }
   } catch (err) {
     console.log(JSON.stringify(err));
+    alert("Something went wrong try loggin in again🔄");
   }
 };
 
@@ -156,8 +157,7 @@ const renderExpenses = (price, description, category, id, i) => {
       <td>${price}</td>
       <td>${description}</td>
       <td>${category}</td>
-      <td><button data-id=${id} class="btn btn-outline-secondary" onclick='editExpense(this)'>Edit</button>
-      </td>
+      
       <td><button data-id=${id} class="btn btn-outline-danger" onclick='deleteExpense(this)'>Delete</button>
       </td>
     </tr>`;
@@ -285,7 +285,7 @@ btnLeader.addEventListener("click", async (e) => {
   // console.log(response);
 
   response.data.userAggregatedExpense.forEach((data, i) => {
-    const formattedPrice = indianCurrency.format(data.total_cost);
+    const formattedPrice = indianCurrency.format(data.totalexpense);
     const name = data.name;
     renderLeaderBoard(i + 1, name, formattedPrice);
   });
